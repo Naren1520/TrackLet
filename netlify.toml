@@ -1,0 +1,19 @@
+# ==========================================
+# TrackLet - Netlify Deployment Configuration
+# ==========================================
+
+[build]
+  command = "pnpm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_FLAGS = "--no-frozen-lockfile"
+
+# Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
