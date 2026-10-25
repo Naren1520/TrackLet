@@ -1,75 +1,130 @@
-# TrackLet — Personal Account Usage Tracker
+# TrackLet - Personal Account & Credit Usage Tracker
 
-A personal tool to record your Gmail and GitHub account pairs, track which months you've used each account throughout the year, and monitor completed vs. pending usage.
-
----
-
-## What is This?
-
-- **Account Groups**: Keeps track of each Gmail address paired with its corresponding GitHub username.
-- **Monthly Usage Checklist**: 12-month grid (Jan–Dec) where you click to toggle an account as **Used** or **Pending** for each month.
-- **Yearly Tracking**: Track usage per year (e.g. 2024, 2025, 2026, 2027) with independent records.
-- **Summary Strip & Analytics**: Instant counts of total accounts, completed months, pending months, completion rate %, plus 4 real charts (monthly distribution, capacity donut, completion ranking, and full 12-month matrix).
-- **Single-User Access**: Protected by login session with your credentials.
-
---
+A sleek, Excel-style monthly credit tracker built for single-user management of Gmail and GitHub account pairs across all 12 months.
 
 ---
 
-## How to Run
+## Support and Open Source Community
 
-### 1. Configure Database in `.env.local`
-Open `.env.local` in your root folder and paste your MongoDB Atlas connection string into `MONGODB_URI`:
+If you find TrackLet useful:
+- **Star this repository** to show your support and help others discover it.
+- **Fork it** to create your own customized version.
+- **Clone and Self-Host** freely for your personal or team workflow.
+- **Contribute** - Pull Requests, bug reports, and feature proposals are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-### 2. Install Dependencies
+---
+
+## Features
+
+- **Excel-Style Spreadsheet Grid**: 12-month calendar (Jan-Dec) with dual sub-columns (`Gmail` and `GitHub`) for 24 distinct monthly credit slots per account pair.
+- **Sticky Column Layout**: Sticky email column on the left with horizontal and vertical scrolling optimized for widescreen and compact views.
+- **Instant MongoDB Atlas Persistence**: Optimistic toggles that save directly to MongoDB Atlas with compound unique indexing.
+- **Yearly Tracking**: Switch between years (2024, 2025, 2026, 2027, etc.) with independent monthly usage records.
+- **Analytics Dashboard**: 4 real-time Recharts visualizations:
+  - Monthly Usage Distribution (Stacked Bar Chart)
+  - Annual Capacity Donut
+  - Account Completion Rankings
+  - Full Cross-Reference Monthly Matrix
+- **Clean Restrained Aesthetics**: High-contrast canvas, solid elevated white cards, Inter typography, and zero neon/gradients.
+- **Production Ready**: Full-stack Next.js 16 with Route Handlers, Zod validation, `jose` session cookies, and Netlify/Vercel support.
+
+---
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Language**: TypeScript (strict mode)
+- **Database**: MongoDB Atlas (Official `mongodb` driver)
+- **Styling**: Tailwind CSS v4 and Inter Typography
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Authentication**: `jose` encrypted JWT session cookies and `bcryptjs` password verification
+
+---
+
+## Getting Started
+
+### 1. Prerequisites
+- Node.js 20+ installed
+- `pnpm` package manager (`npm install -g pnpm`)
+- Free MongoDB Atlas cluster or local MongoDB instance
+
+### 2. Installation
 ```bash
+git clone https://github.com/Naren1520/TrackLet.git
+cd TrackLet
 pnpm install
 ```
 
-### 3. Start Development Server
+### 3. Environment Configuration
+Copy the template to create your `.env.local`:
+```bash
+cp .env.example .env.local
+```
+Fill in your database connection and credentials in `.env.local`:
+```env
+APP_USERNAME="admin"
+APP_PASSWORD_HASH="\$2a\$10\$..."
+SESSION_SECRET="your-secure-random-session-secret-at-least-32-chars-long"
+MONGODB_URI="mongodb+srv://<username>:<password>@cluster0.mongodb.net/?retryWrites=true&w=majority"
+MONGODB_DB_NAME="tracklet"
+```
+
+> Note: To generate a bcrypt hash for your password:
+> ```bash
+> node -e "console.log(require('bcryptjs').hashSync('YourPassword', 10))"
+> ```
+
+### 4. Run Locally
 ```bash
 pnpm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) (or `http://localhost:3001` if port 3000 is occupied).
+Open http://localhost:3000 in your browser.
 
 ---
 
-## How to Test It
+## Deploying to Netlify
 
-1. **Log In**:
-   - Go to [http://localhost:3001/login](http://localhost:3001/login).
-   - Enter the credentials configured in your `.env.local`.
-   - Test the eye toggle to show/hide the password, then click **Sign In**.
+TrackLet includes pre-configured [`netlify.toml`](netlify.toml) and [`.gitignore`](.gitignore) files:
 
-2. **Add an Account Group**:
-   - On the Dashboard, click **Add Account**.
-   - Enter Gmail (e.g., `developer@gmail.com`), GitHub username (e.g., `naren-dev`), and an optional display name.
-   - Click **Create Account Group**.
+1. Push your fork to GitHub.
+2. In [Netlify Dashboard](https://app.netlify.com/), click **Add new site** -> **Import an existing project**.
+3. Choose your GitHub repository. Netlify will auto-detect Next.js runtime.
+4. Add your 5 environment variables under **Site configuration** -> **Environment variables**:
+   - `APP_USERNAME`
+   - `APP_PASSWORD_HASH`
+   - `SESSION_SECRET`
+   - `MONGODB_URI`
+   - `MONGODB_DB_NAME`
+5. Click **Deploy site**.
 
-3. **Toggle Monthly Usage**:
-   - In your account's card, click on any month button (e.g., `Jan`, `Feb`, `Mar`).
-   - The button instantly turns green with a checkmark (**Used**), and the completion rate updates.
-   - Click it again to toggle back to **Pending**.
+---
 
-4. **Switch Tracking Years**:
-   - Use the year dropdown at the top right to switch between `2024`, `2025`, `2026`, `2027`, etc.
-   - Each year maintains its own independent checklist records.
+## Contributing
 
-5. **View Analytics**:
-   - Click **Analytics** in the top navigation bar ([http://localhost:3001/analytics](http://localhost:3001/analytics)).
-   - See the 4 real data-driven views:
-     - Monthly Usage Distribution (stacked bar chart)
-     - Overall Capacity Donut
-     - Account Completion Ranking table
-     - Monthly Account Matrix (cross-reference table)
+We welcome community contributions. Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
 
-6. **Manage Accounts**:
-   - Click **Accounts** in the top navigation ([http://localhost:3001/accounts](http://localhost:3001/accounts)).
-   - Search accounts by Gmail or GitHub username, edit details, or delete an account group with confirmation.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/YourFeature`)
+3. Commit your Changes (`git commit -m 'feat: add feature'`)
+4. Push to the Branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
 
-7. **Verify Production Build**:
-   ```bash
-   pnpm run build
-   ```
-   Builds the production bundle with Next.js Turbopack and verifies TypeScript strict types.
+---
+
+## Security
+
+For security vulnerability disclosure, please review [SECURITY.md](SECURITY.md). Never commit real credentials or database connection strings to public repositories.
+
+---
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+
+---
+
+## Author
+
+Developed by **Naren**.
+For questions or feedback, feel free to open an issue or pull request.
