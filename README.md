@@ -126,5 +126,5 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Author
 
-Developed by **Naren**.
+Developed by **Naren S J**.
 For questions or feedback, feel free to open an issue or pull request.

@@ -34,7 +34,7 @@ TrackLet is licensed under the [MIT License](LICENSE). You are free to:
    ```
 
 ### 2. Install Dependencies
-Ensure you have Node.js 20+ and `pnpm` installed:
+Ensure you have Node.js 22+ and `pnpm` installed:
 ```bash
 pnpm install
 ```
