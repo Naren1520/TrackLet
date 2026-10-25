@@ -17,8 +17,9 @@ export async function proxy(request: NextRequest) {
   }
 
   const token = request.cookies.get(COOKIE_NAME)?.value;
-  const secretKey = process.env.SESSION_SECRET
-    ? new TextEncoder().encode(process.env.SESSION_SECRET)
+  const rawSecret = process.env.SESSION_SECRET?.trim().replace(/^["']|["']$/g, "");
+  const secretKey = rawSecret
+    ? new TextEncoder().encode(rawSecret)
     : null;
 
   let isAuthenticated = false;

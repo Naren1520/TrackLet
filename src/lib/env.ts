@@ -11,13 +11,29 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
+function cleanEnv(val: string | undefined): string | undefined {
+  if (!val) return val;
+  let str = val.trim();
+  if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+    str = str.slice(1, -1).trim();
+  }
+  return str;
+}
+
+function cleanHash(val: string | undefined): string | undefined {
+  const cleaned = cleanEnv(val);
+  if (!cleaned) return cleaned;
+  // Remove backslashes used to escape $ in .env files (e.g., \$2a\$10 -> $2a$10)
+  return cleaned.replace(/\\/g, "");
+}
+
 export function getEnv(): Env {
   const result = envSchema.safeParse({
-    APP_USERNAME: process.env.APP_USERNAME,
-    APP_PASSWORD_HASH: process.env.APP_PASSWORD_HASH,
-    SESSION_SECRET: process.env.SESSION_SECRET,
-    MONGODB_URI: process.env.MONGODB_URI,
-    MONGODB_DB_NAME: process.env.MONGODB_DB_NAME,
+    APP_USERNAME: cleanEnv(process.env.APP_USERNAME),
+    APP_PASSWORD_HASH: cleanHash(process.env.APP_PASSWORD_HASH),
+    SESSION_SECRET: cleanEnv(process.env.SESSION_SECRET),
+    MONGODB_URI: cleanEnv(process.env.MONGODB_URI),
+    MONGODB_DB_NAME: cleanEnv(process.env.MONGODB_DB_NAME),
     NODE_ENV: process.env.NODE_ENV,
   });
 
