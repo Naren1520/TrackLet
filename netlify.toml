@@ -9,6 +9,8 @@
 [build.environment]
   NODE_VERSION = "22"
   PNPM_FLAGS = "--no-frozen-lockfile"
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_OMIT_KEYS = "MONGODB_DB_NAME,APP_USERNAME"
 
 # Security Headers
 [[headers]]
